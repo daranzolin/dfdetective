@@ -1,0 +1,52 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# dfdetective
+
+Column names are sometimes opaque. And sometimes there are hundreds of them. The goal of `dfdetective` is to scour data frames when you have only a vague idea what you're looking for. The functions are mostly thin wrappers around combinations of `lapply()...unique()...grep()`.
+
+## Installation
+
+You can install the released version of dfdetective from GitHub via:
+
+``` r
+remotes::install_github("daranzolin/dfdetective")
+```
+
+### Example A: You want to search all rows to match a pattern.
+
+```{r warning=FALSE, message=FALSE}
+library(dfdetective)
+library(fivethirtyeight)
+library(dplyr)
+
+find_unique_vals(antiquities_act, "chaco")
+
+agencies <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2019/2019-01-15/agencies.csv")
+find_unique_vals(agencies, "^B$")
+```
+
+### Example B: You want to find columns with n unique variables
+
+This is especially useful when searching for binary variables.
+
+```{r}
+find_n_unique_vals(comic_characters, 2:4) # You can pass a numeric vector to the n_unique argument
+```
+
+### Example C: You know the column names and you want to check the unique values
+
+```{r}
+get_unique_vals(san_andreas, contains("worry")) #you can pass classic dplyr select helpers, e.g. starts_with(), contains(), etc.
+```
